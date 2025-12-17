@@ -1,0 +1,18 @@
+# 1. 统一换行符（解决 Windows/Linux 换行符冲突）
+* text=auto 
+# 自动识别文本文件，统一转为 LF 换行（跨平台协作推荐）
+# 若只想 Windows 用 CRLF，可改为：* text=auto eol=crlf
+
+# 2. 指定文件编码（避免乱码）
+*.c text 
+*.h text 
+
+# 3. 标记二进制文件（避免 Git 试图解析为文本）
+*.exe binary
+*.dll binary
+*.png binary
+*.jpg binary
+
+# 4. 特定文件的合并策略（可选，比如配置文件不自动合并）
+*.config merge=ours 
+# 多人改同一 config 文件时，保留当前分支的版本

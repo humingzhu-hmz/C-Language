@@ -1,0 +1,7 @@
+*
+!*.c
+!*.cpp
+!*/
+!.c##
+!.gitignore
+!.gitattributes
