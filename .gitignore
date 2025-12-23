@@ -1,8 +1,8 @@
 *
-!*.c
-!*.cpp
-!*/
-!.c##
 !.gitignore
 !.gitattributes
-former/
+!.vscode/
+!visual_exercise\Project\Project1/
+!*.c
+!*.cpp
+
