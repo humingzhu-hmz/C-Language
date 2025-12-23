@@ -1,7 +1,7 @@
 *
-!*.c
-!*.cpp
-!*/
-!.c##
 !.gitignore
 !.gitattributes
+!.vscode/
+!"Visual School\Basical Program Design\C.1"
+!*.c
+!*.cpp
