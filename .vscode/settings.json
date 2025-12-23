@@ -1,0 +1,26 @@
+{
+    // Code Runner 全局配置
+    "code-runner.clearPreviousOutput": true,
+    "code-runner.runInTerminal": true,
+    "code-runner.saveFileBeforeRun": true,
+    
+    // 默认终端设置为 CMD
+    "terminal.integrated.defaultProfile.windows": "Command Prompt",
+    "terminal.integrated.profiles.windows": {
+        "Command Prompt": {
+            "path": "C:\\Windows\\System32\\cmd.exe",
+            "args": []
+        }
+    },
+
+    // C/C++ 编译器路径
+    "C_Cpp.default.compilerPath": "D:/ProgrameConifgure/MinGw/mingw64/bin/gcc.exe",
+
+    // Code Runner executorMap
+    "code-runner.executorMap": {
+        "c": "cmd /c \"cd /d $dirWithoutTrailingSlash && if not exist ..\\VS_Code_Build\\Debug mkdir ..\\VS_Code_Build\\Debug && if not exist ..\\VS_Code_Build\\Debug\\obj mkdir ..\\VS_Code_Build\\Debug\\obj && if not exist ..\\VS_Code_Build\\Debug\\exe mkdir ..\\VS_Code_Build\\Debug\\exe && g++ \\\"$fileName\\\" -c -o ..\\VS_Code_Build\\Debug\\obj\\$fileNameWithoutExt.o -g && g++ ..\\VS_Code_Build\\Debug\\obj\\$fileNameWithoutExt.o -o ..\\VS_Code_Build\\Debug\\exe\\$fileNameWithoutExt.exe && start cmd /k ..\\VS_Code_Build\\Debug\\exe\\$fileNameWithoutExt.exe\"",
+        "cpp": "cmd /c \"cd /d $dirWithoutTrailingSlash && if not exist ..\\VS_Code_Build\\Debug mkdir ..\\VS_Code_Build\\Debug && if not exist ..\\VS_Code_Build\\Debug\\obj mkdir ..\\VS_Code_Build\\Debug\\obj && if not exist ..\\VS_Code_Build\\Debug\\exe mkdir ..\\VS_Code_Build\\Debug\\exe && g++ \\\"$fileName\\\" -c -o ..\\VS_Code_Build\\Debug\\obj\\$fileNameWithoutExt.o -g && g++ ..\\VS_Code_Build\\Debug\\obj\\$fileNameWithoutExt.o -o ..\\VS_Code_Build\\Debug\\exe\\$fileNameWithoutExt.exe && start cmd /k ..\\VS_Code_Build\\Debug\\exe\\$fileNameWithoutExt.exe\""
+    },
+    "debug.onTaskErrors": "abort",
+    "terminal.integrated.enableMultiLinePasteWarning": "never"
+}
