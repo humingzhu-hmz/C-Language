@@ -2,6 +2,6 @@
 !.gitignore
 !.gitattributes
 !.vscode/
-!"Visual School\Basical Program Design\C.1"
+!"Visual School\Basical Program Design\"
 !*.c
 !*.cpp
