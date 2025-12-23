@@ -1,0 +1,64 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build-c",
+            "type": "shell",
+            "command": "cmd",
+            "args": [
+                "/c",
+                "cd /d \"${fileDirname}\" && if not exist \"..\\VS_Code_Build\\Debug\\${fileDirnameBasename}\\obj\" mkdir \"..\\VS_Code_Build\\Debug\\${fileDirnameBasename}\\obj\" && if not exist \"..\\VS_Code_Build\\Debug\\${fileDirnameBasename}\\exe\" mkdir \"..\\VS_Code_Build\\Debug\\${fileDirnameBasename}\\exe\" && gcc -c \"${file}\" -o \"..\\VS_Code_Build\\Debug\\${fileDirnameBasename}\\obj\\${fileBasenameNoExtension}.o\" -g && gcc \"..\\VS_Code_Build\\Debug\\${fileDirnameBasename}\\obj\\${fileBasenameNoExtension}.o\" -o \"..\\VS_Code_Build\\Debug\\${fileDirnameBasename}\\exe\\${fileBasenameNoExtension}.exe\""
+            ],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "detail": "C语言编译"
+        },
+        {
+            "label": "build-cpp",
+            "type": "shell",
+            "command": "cmd",
+            "args": [
+                "/c",
+                "cd /d \"${fileDirname}\" && if not exist \"..\\VS_Code_Build\\Debug\\${fileDirnameBasename}\\obj\" mkdir \"..\\VS_Code_Build\\Debug\\${fileDirnameBasename}\\obj\" && if not exist \"..\\VS_Code_Build\\Debug\\${fileDirnameBasename}\\exe\" mkdir \"..\\VS_Code_Build\\Debug\\${fileDirnameBasename}\\exe\" && g++ -c \"${file}\" -o \"..\\VS_Code_Build\\Debug\\${fileDirnameBasename}\\obj\\${fileBasenameNoExtension}.o\" -g && g++ \"..\\VS_Code_Build\\Debug\\${fileDirnameBasename}\\obj\\${fileBasenameNoExtension}.o\" -o \"..\\VS_Code_Build\\Debug\\${fileDirnameBasename}\\exe\\${fileBasenameNoExtension}.exe\""
+            ],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "detail": "C++语言编译"
+        },
+        {
+            "type": "cppbuild",
+            "label": "C/C++: gcc.exe 生成活动文件",
+            "command": "D:/ProgrameConifgure/MinGw/mingw64/bin/gcc.exe",
+            "args": [
+                "-fdiagnostics-color=always",
+                "-g",
+                "${file}",
+                "-o",
+                "${fileDirname}/../VS_Code_Build/Debug/${fileDirnameBasename}/exe/${fileBasenameNoExtension}.exe"
+            ],
+            "options": {
+                "cwd": "D:/ProgrameConifgure/MinGw/mingw64/bin"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "调试器生成的任务。"
+        }
+    ]
+}
