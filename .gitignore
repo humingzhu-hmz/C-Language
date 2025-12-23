@@ -2,7 +2,7 @@
 !.gitignore
 !.gitattributes
 !.vscode/
-!visual_exercise\Project\Project2/
+!visual_exercise\Project\Project2\
 !*.c
 !*.cpp
 
