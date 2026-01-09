@@ -56,7 +56,7 @@ int (*Strategy2)();
 DWORD mode = 1;
 int ComputerPlayer = 1;
 int Player = 1;
-int prioritymode=1;
+int prioritymode;
 int strategy = 2;
 int towardtime=0;
 int currentx = 9;
@@ -581,7 +581,7 @@ void Peekspecific(Keymessage* Key)
 			}
 			else {
 				Key->elsekey = msg.vkcode;
-				fprintf(stdout, "press %c(Ascll %d)\n", Key->elsekey,int(Key->elsekey));
+				fprintf(stdout, "press %s(Ascll %d)\n", Key->elsekey,int(Key->elsekey));
 			}
 		}
 	}
@@ -685,8 +685,6 @@ Start:
 			}
 		}
 		Player = 0;
-		exitmode2 = false;// restart mode2 need set exitmode2,otherwise will suspend on if (exitmode2 == true) break,then agian into case 0,leads to no chess free,because 
-						  // strategy no implecoment,then turns to leads to no (x,y)generate.
 	}
 
 
@@ -822,7 +820,7 @@ Start:
 					outtextxy(300, 40, _T("Press R to Restart!"));
 				}
 				EndBatchDraw();
-				getmessage(&msg,EX_KEY);// It eliminates the high-speed empty loops while caused
+				getmessage(&msg,WM_KEYDOWN);// It eliminates the high-speed empty loops while caused
 				// by using peekmessage(in non-blocking mode) when there is 
 				// no message input,which in turn leads to high-speed CPU idling.
 				// Additionally,it can load graphics at very start and normal
@@ -888,12 +886,6 @@ Start:
 									Player = 1;
 									mode = 1;
 									havetarkey = true;
-									mode = 1;
-									switch (ComputerPlayer)// new computer take over current computer player strategy; 
-									{
-									case 1:Strategy = Strategy1; break;
-									case 2:Strategy = Strategy2; break;
-									}
 									exitmode2 = true;
 									break;
 								}
