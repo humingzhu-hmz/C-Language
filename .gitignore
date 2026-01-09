@@ -2,7 +2,8 @@
 !.gitignore
 !.gitattributes
 !.vscode/
-! "Visual School/Basical Program Design/final work/*/"
-! "Visual School/Basical Program Design/final work/*/"
-!*.c
-!*.cpp
+! "Visual School/"
+! "Visual School/Basical Program Design/"
+! "Visual School/Basical Program Design/final work/"
+! "Visual School/Basical Program Design/final work/*.c"
+! "Visual School/Basical Program Design/final work/*.cpp"
