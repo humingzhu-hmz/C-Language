@@ -87,7 +87,7 @@ void dfs(int x,int y,int step,int final_x,int final_y, FILE* fp,int *flag){
 		}
 
 		fclose(fp);
-		exit(0);
+		return;
 	}
 	if(x==final_x && y==final_y){  // Reached exit
         path[x][y] = step;
