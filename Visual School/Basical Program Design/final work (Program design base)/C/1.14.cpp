@@ -1,123 +1,182 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 #include <stdbool.h>
-#define longth 15
-#define width 15
-void prn(int arr[longth][width])
-{
-	for (int i = 0; i<longth; i++)
-	{
-		for (int j = 0; j < width; j++)
-		{
-			if (arr[i][j] == -1) {
-				printf("###");
-			}
-			else if (arr[i][j] == 0) {
-				printf("   ");
-			}
-			else if (arr[i][j] == -2) {
-				printf("SSS");
-			}
-			else if (arr[i][j] == -3) {
-				printf("EEE");
-			}
-			else {
-				printf("%3d", arr[i][j]);
-			}
-		}
-		printf("\n");
-	}
+#include <time.h>
+
+#define MAXN 22  
+#define output_pathcount 30
+int n;                     
+int maze[MAXN][MAXN];       // Maze: -1 = wall, 0 = empty, -2 = start, -3 = exit
+int path[MAXN][MAXN];       
+bool visited[MAXN][MAXN];   
+int path_count = 0;          
+
+int dir[8][2] = { {1,0},{1,-1},{0,-1},{-1,-1},{-1,0},{-1,1},{0,1},{1,1} };
+
+
+void print_maze_with_coord(int size, int maze[MAXN][MAXN], FILE* fp) {
+   
+    printf("    ");
+	fprintf(fp,"    ");
+    for(int j=0;j<size;j++){
+        printf("%2d ", j);
+		 fprintf(fp,"%2d ", j);
+    }
+    printf("\n");
+    fprintf(fp,"\n");
+
+    
+    for(int i=0;i<size;i++){
+        printf("%2d |", i);
+ 		fprintf(fp,"%2d |", i);
+        for(int j=0;j<size;j++){
+            if(maze[i][j] == -1){
+              printf("\033[41m   \033[0m"); if(fp) fprintf(fp,"\033[41m   \033[0m");   // Wall
+            }
+            else if(maze[i][j] == 0){
+                printf("   "); if(fp) fprintf(fp,"   ");   // Empty space
+            }
+            else if(maze[i][j] == -2){
+                printf(" S "); if(fp) fprintf(fp," S ");   // Start
+            }
+            else if(maze[i][j] == -3){
+                printf(" E "); if(fp) fprintf(fp," E ");   // Exit
+            }
+            else{
+                printf("%3d", maze[i][j]); if(fp) fprintf(fp,"%3d", maze[i][j]);  // Step number
+            }
+        }
+        printf("\n");
+		fprintf(fp,"\n");
+    }
+    printf("\n");
+	fprintf(fp,"\n");
 }
-bool isExit(int posx, int posy,int finalposx,int finalposy)
-{
-	return (posx == finalposx && posy == finalposy);
-}
-typedef struct Move
-{
-	int posx, posy;
-}Move;
-Move move[4] = { {0,1},{1,0},{0,-1},{-1,0} };
-void Maze(int arr[longth][width], int currentposx, int currentposy, int *step,int finalposx,int finalposy,int *flag)
-{
-	for (int i = 0; i < 4; i++)
-	{
-		if (arr[currentposx + move[i].posx][currentposy + move[i].posy] == 0)
-		{
-			if (*flag >= ((longth - 1) * (width - 1)*0.8))
-			{
-				printf("");
-				exit(1);
-			}
-			int newposx = currentposx + move[i].posx;
-			int newposy = currentposy + move[i].posy;
-			arr[newposx][newposy] = ++(*step);
-			*flag = *flag + 1;
-			if (!isExit(newposx, newposy, finalposx, finalposy))
-			{
-				Maze(arr, newposx, newposy, step, finalposx, finalposy,flag);
+
+
+void generate_maze(int size, int maze[MAXN][MAXN]) {
+    srand((unsigned int)time(NULL));
+    for(int i=0;i<size;i++){
+        for(int j=0;j<size;j++){
+            if(i==0 || i==size-1 || j==0 || j==size-1)
+            {	maze[i][j] = -1;
+				path[i][j] = -1;  
 			}
 			else
-			{
-				printf(":\n", (*step));
-				arr[longth - 2][width - 2] = -3;
-				prn(arr);
-				exit(0);
-			}
-			arr[newposx][newposy] = 0;
-			(*step)--;
-		}
-	}
+            {   
+				maze[i][j] = (rand()%10 < 2) ? -1 : 0;
+				path[i][j] = (rand()%10 < 2) ? -1 : 0;
+		  	}  // Random wall
+        }
+    }
+    maze[size-2][size-2] = -3;
+	path[size-2][size-2] = -3;  
 }
-void generate_rand_maze(int arr[longth][width])
-{
-	srand((unsigned int)time(NULL));
-	for (int k = 0; k<width; k++)
-	{
-		arr[0][k] = -1;
-		arr[longth - 1][k] = -1;
-	}
-	for (int k = 0; k<longth; k++)
-	{
-		arr[k][0] = -1;
-		arr[k][width - 1] = -1;
-	}
-	for (int i = 1; i<longth - 1; i++)
-	{
-		for (int j = 1; j < width-1; j++)
-		{
-			arr[i][j] = (rand() % 10<2)? - 1:0;
-		}
-	}
-}
-int main()
-{
-	int arr[longth][width];
-	srand((unsigned int)time(NULL));
 
-	//generate initial maze and print maze
-	generate_rand_maze(arr);
-	int startposx, startposy;
-	while (1)
-	{
-		startposx = rand() % (longth - 2) + 1;
-		startposy = rand() % (width - 2) + 1;
-		if (arr[startposx][startposy] == 0)
-		{
-			break;
-		}
-	}
-	arr[startposx][startposy] = -2;
-	arr[longth - 2][width - 2] = -3;
-	prn(arr);
 
-	// generate begin pos
-	
-	int step = 0;
-	
-	//find exit
-	int flag = 0;
-	arr[longth - 2][width - 2] = 0;
-	Maze(arr, startposx, startposy, &step, longth - 2, width - 2,&flag);
-	return 0;
+void dfs(int x,int y,int step,int final_x,int final_y, FILE* fp,int *flag){
+    if(*flag>(final_x*final_y))
+	{
+		if(path_count==0){
+		printf("No solution\n");
+		fprintf(fp,"No solution\n");
+		} 
+		else {
+			printf("Total paths: %d\n", path_count);
+			fprintf(fp,"Total paths: %d\n", path_count);
+		}
+
+		fclose(fp);
+		exit(0);
+	}
+	if(x==final_x && y==final_y){  // Reached exit
+        path[x][y] = step;
+        path_count++;
+		if(path_count <= output_pathcount)
+		{
+			printf("Path %d: total steps = %d\n", path_count, step);
+			fprintf(fp,"Path %d: total steps = %d\n", path_count, step);
+			print_maze_with_coord(n+2, path, fp);  // Print current path
+			path[x][y] = 0;
+		}  
+        return;
+    }
+
+	(*flag)++;
+    visited[x][y] = true;
+    path[x][y] = step;
+
+    for(int i=0;i<8;i++){  
+        int nx = x + dir[i][0];
+        int ny = y + dir[i][1];
+
+        if(nx>=0 && nx<n+2 && ny>=0 && ny<n+2 && maze[nx][ny]!=-1 && !visited[nx][ny]){
+            dfs(nx, ny, step+1, final_x, final_y, fp, flag);
+        }
+    }
+	path[x][y] = 0;  // current location has fall into died load ,around all is wall.
 }
+
+int main(){
+    
+    printf("Enter maze size n (<= 20): ");
+    scanf("%d", &n);
+    if(n<5 || n>20){
+        printf("Invalid size\n");
+        return 1;
+    }
+
+    
+    generate_maze(n+2, maze);
+
+    
+    const char* filepath = "E:\\desktop\\Program_and_code\\C-Language-Files\\Visual School\\Basical Program Design\\final work (Program design base)\\Text\\Maze_graph.txt";
+    FILE* fp = fopen(filepath,"w");
+    if(!fp){printf("Cannot open file!\n"); return 1;}
+    fprintf(fp,"Generated %dx%d maze:\n", n, n);
+    print_maze_with_coord(n+2, maze, fp);
+    fclose(fp);
+    printf("Maze saved to file.\n");
+
+    
+    int start_x, start_y;
+    while(1){
+        printf("Enter start point (x y, inside maze 1~%d, must be free): ", n);
+        scanf("%d %d",&start_x,&start_y);
+        if(start_x<1 || start_x>n || start_y<1 || start_y>n){
+            printf("Coordinates out of range. Try again.\n");
+            continue;
+        }
+        if(maze[start_x][start_y] != 0){
+            printf("Start point cannot be on wall. Try again.\n");
+            continue;
+        }
+        break;
+    }
+
+    maze[start_x][start_y] = -2; 
+	int flag=0;
+    
+    for(int i=0;i<n+2;i++)
+        for(int j=0;j<n+2;j++)
+            visited[i][j] = false;
+
+    
+    fp = fopen(filepath,"a"); 
+    if(!fp){printf("Cannot open file!\n"); return 1;}
+
+    dfs(start_x, start_y, 1, n, n, fp, &flag);
+
+    if(path_count==0){
+        printf("No solution\n");
+        fprintf(fp,"No solution\n");
+    } else {
+        printf("Total paths: %d\n", path_count);
+        fprintf(fp,"Total paths: %d\n", path_count);
+    }
+
+    fclose(fp);
+    return 0;
+}
+
+ 
