@@ -56,9 +56,9 @@ int (*Strategy2)();
 DWORD mode = 1;
 int ComputerPlayer = 1;
 int Player = 1;
-int prioritymode;
+int prioritymode = 1;
 int strategy = 2;
-int towardtime=0;
+int towardtime = 0;
 int currentx = 9;
 int currenty = 9;
 int backcount = 0;
@@ -82,10 +82,10 @@ void drawchessboard()
 	{
 		//draw horizontal and vertical line
 		TCHAR order[3];
-		_stprintf_s(order, _T("%d"),i );
-		outtextxy(10, BOARD_MARGIN + GRID_SIZE * i-5, order);
-		line(BOARD_MARGIN, BOARD_MARGIN +GRID_SIZE* i, BOARD_MARGIN + BOARD_SIZE * GRID_SIZE, BOARD_MARGIN +GRID_SIZE* i);
-		outtextxy(BOARD_MARGIN + GRID_SIZE * i-5, 10, order);
+		_stprintf_s(order, _T("%d"), i);
+		outtextxy(10, BOARD_MARGIN + GRID_SIZE * i - 5, order);
+		line(BOARD_MARGIN, BOARD_MARGIN + GRID_SIZE * i, BOARD_MARGIN + BOARD_SIZE * GRID_SIZE, BOARD_MARGIN + GRID_SIZE * i);
+		outtextxy(BOARD_MARGIN + GRID_SIZE * i - 5, 10, order);
 		line(BOARD_MARGIN + GRID_SIZE * i, BOARD_MARGIN, BOARD_MARGIN + GRID_SIZE * i, BOARD_MARGIN + GRID_SIZE * BOARD_SIZE);
 	}
 	// draw star point
@@ -108,9 +108,9 @@ void drawallchess()
 {
 	for (int i = 0; i < chesscount; i++)
 	{
-		int chessx = chessboard[i].x*GRID_SIZE + BOARD_MARGIN;
-		int chessy = chessboard[i].y*GRID_SIZE + BOARD_MARGIN;
-		setfillcolor(chessboard[i].COLOR==0?BLACK:WHITE);
+		int chessx = chessboard[i].x * GRID_SIZE + BOARD_MARGIN;
+		int chessy = chessboard[i].y * GRID_SIZE + BOARD_MARGIN;
+		setfillcolor(chessboard[i].COLOR == 0 ? BLACK : WHITE);
 		solidcircle(chessx, chessy, CHESS_REDIOUS);
 	}
 }
@@ -124,7 +124,7 @@ void drawsinglechess(int newchessx, int newchessy, int color)
 	for (int i = 3; i <= CHESS_REDIOUS; i += 3)
 	{
 		solidcircle(screenX, screenY, i);
-		Sleep(12);
+		Sleep(18);
 	}
 }
 
@@ -154,7 +154,7 @@ void Gameinfo()
 	TCHAR cuplayer[50];
 	_stprintf_s(cuplayer, _T("Current: % s"), currentplayercolor == 0 ? _T("Black") : _T("White"));
 	outtextxy(790, 70, cuplayer);
-	
+
 	settextcolor(BLACK);
 	settextstyle(25, 0, _T("Arial"));
 
@@ -172,7 +172,7 @@ void Gameinfo()
 	// Controls
 	outtextxy(790, 200, _T("Controls:"));
 	outtextxy(790, 230, _T("Arrow Keys: Move"));
-	
+
 	TCHAR SPACETEXT[50];
 	_stprintf_s(SPACETEXT, _T("Space: % s"), mode != 2 ? _T("Place") : _T("Suspend"));
 	outtextxy(790, 260, SPACETEXT);
@@ -190,7 +190,7 @@ void Gameinfo()
 }
 
 // disapper carton
-void discarton(int undox,int undoy)
+void discarton(int undox, int undoy)
 {
 	for (int i = CHESS_REDIOUS; i >= 0; i--)
 	{
@@ -200,18 +200,18 @@ void discarton(int undox,int undoy)
 		drawallchess();
 		drawcursor(currentx, currenty);
 		setfillcolor(chessboard[chesscount].COLOR == 0 ? BLACK : WHITE);
-		solidcircle(undox*GRID_SIZE+BOARD_MARGIN,undoy*GRID_SIZE+BOARD_MARGIN, i);
+		solidcircle(undox * GRID_SIZE + BOARD_MARGIN, undoy * GRID_SIZE + BOARD_MARGIN, i);
 		Gameinfo();
 		EndBatchDraw();
-		Sleep(12);
+		Sleep(18);
 	}
 }
 
 //check chess
 int	 checkchess(int currentx, int currenty)
 {
-	int chessx = currentx ;
-	int chessy = currenty ;
+	int chessx = currentx;
+	int chessy = currenty;
 	for (int i = 0; i < chesscount; i++)
 	{
 		if (chessboard[i].x == chessx && chessboard[i].y == chessy)
@@ -223,9 +223,9 @@ int	 checkchess(int currentx, int currenty)
 }
 
 // add chess
-bool addchess(int currentx,int currenty)
+bool addchess(int currentx, int currenty)
 {
-	if (checkchess(currentx,currenty)>0)
+	if (checkchess(currentx, currenty) > 0)
 	{
 		return false;
 	}
@@ -237,17 +237,17 @@ bool addchess(int currentx,int currenty)
 }
 
 //check win
-bool appearwin(int currentx,int currenty,int color)// check win
+bool appearwin(int currentx, int currenty, int color)// check win
 {
 	if (chesscount < 8)return false;
 	for (int d = 0; d < 4; d++)
 	{
 		int count = 1;
-		for (int j = 1; j <=4; j++)
+		for (int j = 1; j <= 4; j++)
 		{
-			int x = currentx + j*direction[d][0];
-			int y = currenty + j*direction[d][1];
-			if (x<=BOARD_SIZE&&y<=BOARD_SIZE&&checkchess(x, y) == color + 1)
+			int x = currentx + j * direction[d][0];
+			int y = currenty + j * direction[d][1];
+			if (x <= BOARD_SIZE && y <= BOARD_SIZE && checkchess(x, y) == color + 1)
 			{
 				count++;
 			}
@@ -260,7 +260,7 @@ bool appearwin(int currentx,int currenty,int color)// check win
 		{
 			int x = currentx - k * direction[d][0];
 			int y = currenty - k * direction[d][1];
-			if (x>=0&&y>=0&&checkchess(x, y) == color + 1)
+			if (x >= 0 && y >= 0 && checkchess(x, y) == color + 1)
 			{
 				count++;
 			}
@@ -298,19 +298,19 @@ int strategy1()
 	return 0;
 }
 
-int threat_degree(int x,int y,int humancolor)
+int threat_degree(int x, int y, int humancolor)
 {
 	if (chesscount < 5) return Threat_weaker;
 	int threat_state = Threat_weaker;
 	int threat_temp = Threat_weaker;
-	if (appearwin(x, y,humancolor))// check human (priority defend)
+	if (appearwin(x, y, humancolor))// check human (priority defend)
 	{
 		threat_state = Threat_serious;
 		return threat_state;
 	}
 	for (int d = 0; d < 4; d++)
 	{
-		int count = 1,block=0;
+		int count = 1, block = 0;
 		for (int j = 1; j <= 4; j++)
 		{
 			int nx = x + j * direction[d][0];
@@ -349,11 +349,11 @@ int threat_degree(int x,int y,int humancolor)
 			switch (block)
 			{
 			case 0: threat_temp = Threat_stronger;
-					break;// _xxx( )_
+				break;// _xxx( )_
 			case 1: threat_temp = Threat_middle;
-					break;// |xxx( )_
+				break;// |xxx( )_
 			case 2: threat_temp = Threat_weaker;
-					break;// 
+				break;// 
 			}
 		}
 		else
@@ -374,9 +374,9 @@ int threat_degree(int x,int y,int humancolor)
 
 int maxscore(int testx, int testy)
 {
-	if (chesscount ==1)return 0;
+	if (chesscount == 1)return 0;
 	int temp = 0;
-	
+
 	for (int d = 0; d < 4; d++)
 	{
 		int count = 1;
@@ -412,7 +412,7 @@ int maxscore(int testx, int testy)
 }
 int strategy2()
 {
-	int score = -1;/*真正的问题是score < maxscore(x, 
+	int score = -1;/*真正的问题是score < maxscore(x,
 	y)在只有一个棋子的时候永远会不成立,因为score=0,
 	而且maxscore永远等于0导致currentx一直没有更换,而此时我的
 	currentx和我下的棋子的坐标是一致的就导致了结果返回来了,但是又
@@ -437,17 +437,17 @@ int strategy2()
 			}
 		}
 	}
-	
+
 	return 0;
 }
 int strategy3()
 {
-	
+
 	int score = -1;
 	int center = (BOARD_SIZE) / 2;
 	int threat_state = Threat_weaker;
 	int humancolor = 1 - currentplayercolor;
-	
+
 	for (int i = 0; i <= BOARD_SIZE; i++)//check myself whether able to win.
 	{
 		int x = (center + i) % (BOARD_SIZE + 1);
@@ -457,7 +457,7 @@ int strategy3()
 			y = (center + y) % (BOARD_SIZE + 1);
 			if (checkchess(x, y) == 0)
 			{
-				if (appearwin(x, y,currentplayercolor))
+				if (appearwin(x, y, currentplayercolor))
 				{
 					currentx = x;
 					currenty = y;
@@ -467,7 +467,7 @@ int strategy3()
 		}
 	}
 
-	
+
 	for (int i = 0; i <= BOARD_SIZE; i++)//check human
 	{
 		int x = (center + i) % (BOARD_SIZE + 1);
@@ -482,7 +482,7 @@ int strategy3()
 					threat_state = T;
 					currentx = x;
 					currenty = y;
-					
+
 				}
 			}
 		}
@@ -492,7 +492,7 @@ int strategy3()
 		return threat_state;
 	}
 
-	
+
 	for (int i = 0; i <= BOARD_SIZE; i++)
 	{
 		int x = (center + i) % (BOARD_SIZE + 1);
@@ -510,7 +510,7 @@ int strategy3()
 			}
 		}
 	}
-	
+
 	return 0;
 }
 
@@ -533,7 +533,7 @@ void undo()
 // take forward
 void redo()
 {
-	if (backcount > 0&&towardtime>0)
+	if (backcount > 0 && towardtime > 0)
 	{
 		drawsinglechess(chessboard[chesscount].x, chessboard[chesscount].y, chessboard[chesscount].COLOR);
 		chesscount++;
@@ -563,25 +563,25 @@ void Peekspecific(Keymessage* Key)
 	while (peekmessage(&msg))
 	{
 		if (msg.message == WM_KEYDOWN)
-		{	
+		{
 			if (msg.vkcode == VK_ESCAPE)
 			{
 				Key->esc = true;
-				fprintf(stdout, "press %s(Ascll %d)\n", "ESC",VK_ESCAPE);
+				fprintf(stdout, "press %s(Ascll %d)\n", "ESC", VK_ESCAPE);
 			}
 			else if (msg.vkcode == VK_SPACE)
 			{
 				Key->space = true;
-				fprintf(stdout, "press %s(Ascll %d)\n", "SPACE",VK_SPACE);
+				fprintf(stdout, "press %s(Ascll %d)\n", "SPACE", VK_SPACE);
 			}
 			else if (msg.vkcode == VK_SHIFT)
 			{
 				Key->shift = true;
-				fprintf(stdout, "press %s(Ascll %d)\n", "SHIFT",VK_SHIFT);
+				fprintf(stdout, "press %s(Ascll %d)\n", "SHIFT", VK_SHIFT);
 			}
 			else {
 				Key->elsekey = msg.vkcode;
-				fprintf(stdout, "press %s(Ascll %d)\n", Key->elsekey,int(Key->elsekey));
+				fprintf(stdout, "press %c(Ascll %d)\n", Key->elsekey, int(Key->elsekey));
 			}
 		}
 	}
@@ -600,7 +600,7 @@ Start:
 	fprintf(stdout, "press \033[36mR/r\033[0m to restart the game\n");
 	fprintf(stdout, "press \033[36mESC\033[0m to exit the game\n");
 	fprintf(stdout, "please chose game mode((\033[32mhuman vs human\033[0m )or(\033[32mhuman vs Computer\033[0m)or(\033[32mcomputer vs computer\033[0m),0 is former,1 is later,2 is last):\n");
-	if (scanf("%d", &mode) != 1 || (mode != 0 && mode != 1&&mode!=2))
+	if (scanf("%d", &mode) != 1 || (mode != 0 && mode != 1 && mode != 2))
 	{
 		fprintf(stderr, "invalid input,default human vs computer mode\n\n");
 		while (getchar() != '\n');
@@ -610,7 +610,7 @@ Start:
 	{
 		fprintf(stdout, "you chose \033[32mhuman vs human mode\033[0m\n");
 	}
-	else if(mode ==1)
+	else if (mode == 1)
 	{
 		fprintf(stdout, "you chose \033[32mhuman vs Computer mode\033[0m\n");
 		fprintf(stdout, "\nplease chose computer startegy(1,2,3):\n\n");
@@ -685,6 +685,8 @@ Start:
 			}
 		}
 		Player = 0;
+		exitmode2 = false;// restart mode2 need set exitmode2,otherwise will suspend on if (exitmode2 == true) break,then agian into case 0,leads to no chess free,because 
+		// strategy no implecoment,then turns to leads to no (x,y)generate.
 	}
 
 
@@ -708,265 +710,271 @@ Start:
 		bool freechess = false;
 		switch (Player)
 		{
-			case 1:
+		case 1:
 
-				if (msg.message == WM_KEYDOWN)
+			if (msg.message == WM_KEYDOWN)
+			{
+				if (msg.vkcode == VK_ESCAPE)
 				{
-					if (msg.vkcode == VK_ESCAPE)
+					restartgame();
+					running = false;
+					break;
+				}
+				short ctrlstate = GetKeyState(VK_CONTROL);
+				bool ctrlpressed = (ctrlstate & 0x8000) == 0 ? false : true;
+				switch (msg.vkcode)
+				{
+				case 'z':
+				case 'Z':if (ctrlpressed && !gameover) {
+					if (mode == 1 && chesscount >= 2 && backcount < MAXCHESS)
 					{
-						restartgame();
-						running = false;
-						break;
+						undo();
+						backcount--;
+						towardtime--;
+						undo();
 					}
-					short ctrlstate = GetKeyState(VK_CONTROL);
-					bool ctrlpressed = (ctrlstate & 0x8000) == 0 ? false : true;
-					switch (msg.vkcode)
+					else if (mode == 0)
+						undo();
+					break;
+
+				}
+						break;
+				case 'y':
+				case 'Y':if (ctrlpressed && !gameover) {
+					if (mode == 1 && towardtime > 0)
 					{
-					case 'z':
-					case 'Z':if (ctrlpressed && !gameover) {
-						if (mode == 1 && chesscount >= 2&&backcount<MAXCHESS)
-						{
-							undo();
-							backcount--;
-							towardtime--;
-							undo();
-						}
-						else if(mode==0)
-							undo();
-						break;
-					
+						redo();
+						backcount++;
+						towardtime++;
+						redo();
+						freechess = true;
 					}
-							break;
-					case 'y':
-					case 'Y':if (ctrlpressed && !gameover) {
-						if (mode == 1&&towardtime>0)
-						{
-							redo();
-							backcount++;
-							towardtime++;
-							redo();
-							freechess = true;
-						}
-						else if(mode ==0)
-						{
-							redo();
-							freechess = true;
-						}
-						break;
+					else if (mode == 0)
+					{
+						redo();
+						freechess = true;
 					}
-							break;
-					case 'w':
-					case 'W':
-					case VK_UP:
-						if (currenty > 0 && !gameover)currenty--; break;
-					case 's':
-					case 'S':
-					case VK_DOWN:
-						if (currenty < BOARD_SIZE && !gameover)currenty++; break;
-					case 'a':
-					case 'A':
-					case VK_LEFT:
-						if (currentx > 0 && !gameover)currentx--; break;
-					case 'd':
-					case 'D':
-					case VK_RIGHT:
-						if (currentx < BOARD_SIZE && !gameover)currentx++; break;
-					case 'r':
-					case 'R':
-						restartgame();
+					break;
+				}
 						break;
-					case VK_SPACE:
-						if (GetTickCount() - lastspacetime > 20 && !gameover)
+				case 'w':
+				case 'W':
+				case VK_UP:
+					if (currenty > 0 && !gameover)currenty--; break;
+				case 's':
+				case 'S':
+				case VK_DOWN:
+					if (currenty < BOARD_SIZE && !gameover)currenty++; break;
+				case 'a':
+				case 'A':
+				case VK_LEFT:
+					if (currentx > 0 && !gameover)currentx--; break;
+				case 'd':
+				case 'D':
+				case VK_RIGHT:
+					if (currentx < BOARD_SIZE && !gameover)currentx++; break;
+				case 'r':
+				case 'R':
+					restartgame();
+					break;
+				case VK_SPACE:
+					if (GetTickCount() - lastspacetime > 20 && !gameover)
+					{
+						if (checkchess(currentx, currenty) == 0)
 						{
-							if (checkchess(currentx, currenty) == 0)
+							addchess(currentx, currenty);
+							if (backcount > 0) backcount--;
+							towardtime = 0;
+							freechess = true;
+							printf("%s(%s) at (%d,%d)\n", "Humans", currentplayercolor == 0 ? "black" : "white", currentx, currenty);
+							drawsinglechess(currentx, currenty, currentplayercolor);
+
+							if (appearwin(currentx, currenty, currentplayercolor))
 							{
-								addchess(currentx, currenty);
-								if (backcount > 0) backcount--;
-								towardtime = 0;
-								freechess = true;
-								printf("%s(%s) at (%d,%d)\n","Humans", currentplayercolor == 0 ? "black" : "white", currentx, currenty);
-								drawsinglechess(currentx, currenty, currentplayercolor);
-
-								if (appearwin(currentx, currenty,currentplayercolor))
-								{
-									_stprintf_s(WINMESSAGE, _T("WIN:%s(%s)"),_T("Humans"),currentplayercolor == 0 ? _T("black") : _T("white"));
-									gameover = true;
-									break;
-								}
-								Player = 2 - Player - mode;
-								currentplayercolor = 1 - currentplayercolor;
+								_stprintf_s(WINMESSAGE, _T("WIN:%s(%s)"), _T("Humans"), currentplayercolor == 0 ? _T("black") : _T("white"));
+								gameover = true;
+								break;
 							}
+							Player = 2 - Player - mode;
+							currentplayercolor = 1 - currentplayercolor;
 						}
-						lastspacetime = GetTickCount();
-						break;
 					}
+					lastspacetime = GetTickCount();
+					break;
 				}
+			}
 
-				if (!freechess)
-				{
-					BeginBatchDraw();
-					cleardevice();
-					drawchessboard();
-					drawallchess();
-					drawcursor(currentx, currenty);
-					Gameinfo();
-				}
-				if (gameover)
-				{
-					settextcolor(RED);
-					settextstyle(35, 0, _T("Arial"));
-					outtextxy(300, 0, WINMESSAGE);
-					settextcolor(BLUE);
-					outtextxy(300, 40, _T("Press R to Restart!"));
-				}
-				EndBatchDraw();
-				getmessage(&msg,WM_KEYDOWN);// It eliminates the high-speed empty loops while caused
-				// by using peekmessage(in non-blocking mode) when there is 
-				// no message input,which in turn leads to high-speed CPU idling.
-				// Additionally,it can load graphics at very start and normal
-				// key response functioning 
-				break;
-
-			case 0:
+			if (!freechess)
+			{
 				BeginBatchDraw();
 				cleardevice();
 				drawchessboard();
 				drawallchess();
 				drawcursor(currentx, currenty);
 				Gameinfo();
-				EndBatchDraw();
+			}
+			if (gameover)
+			{
+				settextcolor(RED);
+				settextstyle(35, 0, _T("Arial"));
+				outtextxy(300, 0, WINMESSAGE);
+				settextcolor(BLUE);
+				outtextxy(300, 40, _T("Press R to Restart!"));
+			}
+			EndBatchDraw();
+			getmessage(&msg, EX_KEY);// It eliminates the high-speed empty loops while caused
+			// by using peekmessage(in non-blocking mode) when there is 
+			// no message input,which in turn leads to high-speed CPU idling.
+			// Additionally,it can load graphics at very start and normal
+			// key response functioning 
+			break;
 
-				/*
-				prioritymode = 1; if the game has restart(no mode change, only press r),
-				 this action can make next time game 's priority brcome human. or use
-				 prioritymode=1-prioritymode(only once) to alterate(take turns to exchange) prioritymode
-				*/
+		case 0:
+			BeginBatchDraw();
+			cleardevice();
+			drawchessboard();
+			drawallchess();
+			drawcursor(currentx, currenty);
+			Gameinfo();
+			EndBatchDraw();
 
-				//only just generate currentx,currenty.
-				if(mode==1)Strategy();
+			/*
+			prioritymode = 1; if the game has restart(no mode change, only press r),
+			 this action can make next time game 's priority brcome human. or use
+			 prioritymode=1-prioritymode(only once) to alterate(take turns to exchange) prioritymode
+			*/
+
+			//only just generate currentx,currenty.
+			if (mode == 1)Strategy();
+			if (mode == 2)
+			{
+				while (GetTickCount() - lastkeytime < 1000)//have time give to make chioce,
+					//when the distance of time more than set value.incomplment strategy.
+				{
+					havetarkey = false;
+					Peekspecific(&Key);
+					if (Key.esc)
+					{
+						restartgame();
+						running = false;
+						havetarkey = true;
+						exitmode2 = true;// actually ,this change is not necessary,because next senstence(break) can break switch ,
+						//then running is false,can end mode2.
+						break;// break switch and end while(running)
+					}
+					if (Key.space)
+					{
+						settextcolor(RED);
+						settextstyle(38, 0, _T("Arial"));
+						outtextxy(350, 0, _T("Already Suspend!"));
+						while (true)
+						{
+							//getmessage(&msg);这里是个大错误,我想等待我按键然后检测是否有消息,我后面又用
+							//peekspecific,但此时消息已经取出来了,所以key->space等我按下的键都是false,进入死循环了
+							//或者使用peek和get不能混在一起用.还可以这样getmessage 判断msg.vkcode也可以,这样更好还可以避免cpu空转
+							Peekspecific(&Key);
+							if (Key.esc)
+							{
+								restartgame();
+								running = false;
+								havetarkey = true;
+								exitmode2 = true;// this change is necessary,because break only end the nearst switch or while.
+								//break while(msg.vk.....),then this execution still incomplement the remaining code,so we need
+								// define avariable (exitmode2) to help exit.
+								break;
+							}
+							if (Key.shift)
+							{
+								Player = 1;
+								mode = 1;
+								havetarkey = true;
+								mode = 1;
+								switch (ComputerPlayer)// new computer take over current computer player strategy; 
+								{
+								case 1:Strategy = Strategy1; break;
+								case 2:Strategy = Strategy2; break;
+								}
+								exitmode2 = true;
+								break;
+							}
+							if (Key.space)
+							{
+								havetarkey = true;
+								break;// press SPACE again,on brhalf of continue game in mode2.
+							}
+						}
+						// msg.vkcode = VK_SPACE;  getmessage() will flush msg.message,if the message  is not SPACE or ESCAPE or shift,which from getmessage(no break while loops) ,it represent 
+						// the press is invalid, we must reset vkcode and into loops again until we input correct.
+						/*OR way2 (not
+						if (msg.vkcode==VK_SPACE)
+						{
+							while(true)
+							{
+								getmessage();
+								if (msg.message == WM_KEYDOWN)
+									{
+										if (msg.vkcode == VK_ESCAPE){...........}
+										if (msg.vkcode == VK_SPACE) {...........}
+										if (msg.vkcode == VK_SHIFT) {...........}
+									}
+							}
+						}
+						*/
+					}
+					if (havetarkey)break;//break while(.....<2000)
+				}
+				lastkeytime = GetTickCount();
+				if (exitmode2 == true) break;
+				if (mode == 2 && chesscount < 2)// avoid mode =2,only one chesss situation
+				{
+					do {
+						currentx = rand() % 5 + 7;
+						currenty = rand() % 5 + 7;// currentx and currenty all belong to 7~11}
+					} while (checkchess(currentx, currenty));
+				}
+				else
+				{
+					switch (ComputerPlayer)
+					{
+					case 1:Strategy1(); ComputerPlayer = 3 - ComputerPlayer; break;
+					case 2:Strategy2(); ComputerPlayer = 3 - ComputerPlayer; break;
+					}
+				}
+			}
+			addchess(currentx, currenty);//add the x and y of computer.
+			int sleeptime = rand() % 150;
+			Sleep(sleeptime);
+			drawsinglechess(currentx, currenty, currentplayercolor);
+			printf("%s(%s) at (%d,%d)\n", "Computer", currentplayercolor == 0 ? "black" : "white", currentx, currenty);
+
+			// human vs computer ,only decrese once for backcount.
+			towardtime = 0;
+			Player = 2 - Player - mode;
+
+			if (appearwin(currentx, currenty, currentplayercolor))
+			{
+				_stprintf_s(WINMESSAGE, _T("WIN:%s(%s)"), _T("Computer"), currentplayercolor == 0 ? _T("black") : _T("white"));
+				gameover = true;
+				if (mode == 1) break;
+			}
+			currentplayercolor = 1 - currentplayercolor;
+
+			if (gameover)
+			{
+				settextcolor(RED);
+				settextstyle(35, 0, _T("Arial"));
+				outtextxy(300, 0, WINMESSAGE);
+				settextcolor(BLUE);
+				outtextxy(300, 40, _T("Press R to Restart!"));
+				outtextxy(300, 80, _T("please press exit or r:"));
 				if (mode == 2)
 				{
-					while (GetTickCount() - lastkeytime < 1000)//have time give to make chioce,
-															   //when the distance of time more than set value.incomplment strategy.
-					{
-						havetarkey = false;
-						Peekspecific(&Key);
-						if (Key.esc)
-						{
-							restartgame();
-							running = false;
-							havetarkey = true;
-							exitmode2 = true;// actually ,this change is not necessary,because next senstence(break) can break switch ,
-							//then running is false,can end mode2.
-							break;// break switch and end while(running)
-						}
-						if (Key.space)
-						{
-							settextcolor(RED);
-							settextstyle(38, 0, _T("Arial"));
-							outtextxy(350, 0, _T("Already Suspend!"));
-							while (true)
-							{
-								//getmessage(&msg);这里是个大错误,我想等待我按键然后检测是否有消息,我后面又用
-								//peekspecific,但此时消息已经取出来了,所以key->space等我按下的键都是false,进入死循环了
-								//或者使用peek和get不能混在一起用.还可以这样getmessage 判断msg.vkcode也可以,这样更好还可以避免cpu空转
-								Peekspecific(&Key);
-								if (Key.esc)
-								{
-									restartgame();
-									running = false;
-									havetarkey = true;
-									exitmode2 = true;// this change is necessary,because break only end the nearst switch or while.
-									//break while(msg.vk.....),then this execution still incomplement the remaining code,so we need
-									// define avariable (exitmode2) to help exit.
-									break;
-								}
-								if (Key.shift)
-								{
-									Player = 1;
-									mode = 1;
-									havetarkey = true;
-									exitmode2 = true;
-									break;
-								}
-								if (Key.space)
-								{
-									havetarkey = true;
-									break;// press SPACE again,on brhalf of continue game in mode2.
-								}
-							}
-							// msg.vkcode = VK_SPACE;  getmessage() will flush msg.message,if the message  is not SPACE or ESCAPE or shift,which from getmessage(no break while loops) ,it represent 
-							// the press is invalid, we must reset vkcode and into loops again until we input correct.
-							/*OR way2 (not
-							if (msg.vkcode==VK_SPACE)
-							{
-								while(true)
-								{
-									getmessage();
-									if (msg.message == WM_KEYDOWN)
-										{
-											if (msg.vkcode == VK_ESCAPE){...........}
-											if (msg.vkcode == VK_SPACE) {...........}
-											if (msg.vkcode == VK_SHIFT) {...........}
-										}
-								}
-							}
-							*/
-						}
-						if (havetarkey)break;//break while(.....<2000)
-					}
-					lastkeytime = GetTickCount();
-					if (exitmode2 == true) break;
-					if (mode == 2 && chesscount < 2)// avoid mode =2,only one chesss situation
-					{
-						do {
-							currentx = rand() % 5 + 7;
-							currenty = rand() % 5 + 7;// currentx and currenty all belong to 7~11}
-						} while (checkchess(currentx, currenty));
-					}
-					else
-					{
-						switch (ComputerPlayer)
-						{
-						case 1:Strategy1(); ComputerPlayer = 3 - ComputerPlayer; break;
-						case 2:Strategy2(); ComputerPlayer = 3 - ComputerPlayer; break;
-						}
-					}
+					Player = 1;//turn to humans to make choice ,continue of exit?
 				}
-				addchess(currentx, currenty);//add the x and y of computer.
-				int sleeptime = rand() % 150;
-				Sleep(sleeptime);
-				drawsinglechess(currentx, currenty, currentplayercolor);
-				printf("%s(%s) at (%d,%d)\n", "Computer", currentplayercolor == 0 ? "black" : "white", currentx, currenty);
-			
-				// human vs computer ,only decrese once for backcount.
-				towardtime = 0;
-				Player = 2 - Player - mode;
-
-				if (appearwin(currentx, currenty,currentplayercolor))
-				{
-					_stprintf_s(WINMESSAGE, _T("WIN:%s(%s)"),_T("Computer"), currentplayercolor == 0 ? _T("black") : _T("white"));
-					gameover = true;
-					if(mode==1) break;
-				}
-				currentplayercolor = 1 - currentplayercolor;
-			
-				if (gameover)
-				{
-					settextcolor(RED);
-					settextstyle(35, 0, _T("Arial"));
-					outtextxy(300, 0, WINMESSAGE);
-					settextcolor(BLUE);
-					outtextxy(300, 40, _T("Press R to Restart!"));
-					outtextxy(300, 80, _T("please press exit or r:"));
-					if (mode == 2)
-					{
-						Player = 1;//turn to humans to make choice ,continue of exit?
-					}
-				}
+			}
 		}
 
-		
+
 	}
 	int ch;
 	char readline[5];
@@ -976,7 +984,7 @@ Start:
 		fprintf(stdout, "Gameover,Bye!");
 		closegraph();
 	}
-	else if(readline[0] == 'y' || readline[0] == 'Y')
+	else if (readline[0] == 'y' || readline[0] == 'Y')
 	{
 		system("cls");
 		goto Start;
