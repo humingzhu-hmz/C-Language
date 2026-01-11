@@ -356,6 +356,18 @@ int threat_degree(int x, int y, int humancolor)
 				break;// 
 			}
 		}
+		//else if (count >= 3)
+		//{
+		//	switch(block)
+		//	{
+		//	case 0: threat_temp = Threat_middle;
+		//		break;// _xx( )_
+		//	case 1: threat_temp = Threat_weak;
+		//		break;// |xx( )_
+		//	case 2: threat_temp = Threat_weaker;
+		//		break;// 
+		//	}
+		//}
 		else
 		{
 			threat_temp = Threat_weak;
@@ -365,10 +377,7 @@ int threat_degree(int x, int y, int humancolor)
 			threat_state = threat_temp;
 		}
 	}
-	if (threat_state >= Threat_middle)
-	{
-		return threat_state;
-	}
+	
 	return threat_state;
 }
 
@@ -696,7 +705,7 @@ Start:
 
 	if (beginover)
 	{
-		initgraph(1010, 750, EX_SHOWCONSOLE);
+		initgraph(1010, 850, EX_SHOWCONSOLE);
 		setbkcolor(RGB(240, 240, 240));
 		cleardevice();
 		beginover = false;
