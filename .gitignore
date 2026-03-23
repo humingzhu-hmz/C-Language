@@ -1,3 +1,7 @@
 *
 !.gitignore
 !.gitattributes
+!.vscode/
+! "MYcode/*/"
+!*.c
+!*.cppA
