@@ -377,7 +377,7 @@ int threat_degree(int x, int y, int humancolor)
 			threat_state = threat_temp;
 		}
 	}
-	
+
 	return threat_state;
 }
 
