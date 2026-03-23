@@ -2,7 +2,6 @@
 !.gitignore
 !.gitattributes
 !.vscode/
-! "Visual School/Basical Program Design/final work/*/"
-! "Visual School/Basical Program Design/final work/*/"
+! "MYcode/*/"
 !*.c
 !*.cpp
