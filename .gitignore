@@ -2,6 +2,7 @@
 !.gitignore
 !.gitattributes
 !.vscode/
-! "C-Language-Files/MYcode/*/"
+! /MYcode/
+! /MYcode/**/
 !*.c
-!*.cppA
+!*.cpp
