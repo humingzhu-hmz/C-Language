@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <unistd.h>
 #define EQ(a,b) ((a)==(b))
 #define LT(a,b) ((a)<(b))
 #define GT(a,b) ((a)>(b))
@@ -22,6 +23,7 @@ Node* createNode(int value) {
     newnode->right=NULL;
     newnode->ltag=0;
     newnode->rtag=0;
+    return newnode;
 }
 // 寻找节点
 Node**findnode(ThreadedTree *root,int value)
@@ -82,6 +84,9 @@ void deletenode(ThreadedTree *root,int value)
             Node*temp=(*node)->left;
             while(temp->right)  temp=temp->right;
             (*node)->value=temp->value;
+            // 再释放之前把原树指向这块内存的指针修改为NULL,否则就会访问到已经被释放的内存地址,造成不可预知的错误
+            Node**tempnode=findnode(&((*node)->left),temp->value);
+            *tempnode=NULL;
             free(temp);
         }
     }
@@ -223,7 +228,9 @@ Node* getprenext(Node* node)
     else
     {
         // 左孩子存在直接返回左孩子,否则右孩子,右孩子一定存在否则就是线索,不会进入else 语句
-        if(node->left) return node->left;
+        // 这里不能用node->left来判断,因为这个时候node->left可能是线索,如果是线索就不能进入递归了,如果不是线索才进入递归
+        // 否则会导致死循环
+        if(!node->ltag) return node->left;
         else return node->right;
     }
 }
@@ -280,8 +287,20 @@ void createpostorderthread(ThreadedTree T)
         head->left=NULL;
         head->right=NULL;
         postorderthread(T);
-        pre->right=head;
-        pre->rtag=1;
+        // 致命错误:后序线索化覆盖了T节点的右孩子,先序和中序中最后一个访问的一定是叶子节点或者
+        // 没有右孩子的节点,后续中最后一个访问的节点是T节点所以这里会直接覆盖T节点的右孩子,导致后续访问T节点的右孩子时访问到已经被覆盖的内存地址,造成不可预知的错误
+        // 这就是我当时为什么后序遍历错误的原因,因为我直接把pre->right=head了,而pre就是T节点,所以就直接覆盖了T节点的右孩子,导致后续访问T节点的右孩子时访问到已经被覆盖的内存地址,造成不可预知的错误
+        // 还是gemini牛逼
+        // pre->right=head;
+        // pre->rtag=1;
+        // head->left=pre;
+        // head->ltag=1;
+        // 此时pre就是T ,只有T满足条件才能链接
+        if(pre&&!pre->right)
+        {
+            pre->right=head;
+            pre->rtag=1;
+        }
         head->left=pre;
         head->ltag=1;
     }
@@ -297,10 +316,13 @@ Node* getpostfront(Node* node)
     }
     else
     {
-        if(node->right) return node->right;
-        else return node->left;
+        if(node->rtag==0) return node->right;// 必须先判断是不是线索,否则传回后继线索就会错误
+        else return node->left;// node->left一定是节点如果是线索就会直接返回了,而且此时右孩子是后继线索
     }
 }
+// 这里是逆序输出的结果,因为后序中最后一个访问的节点是根节点,
+///所以我们从根节点出发往前访问就是逆序输出了,
+// 如果想要正序输出就需要先把结果存储在栈中再输出
 void traverpostorderthread(ThreadedTree startnode)
 {
     ThreadedTree cur=startnode;
@@ -355,32 +377,68 @@ void freetree(ThreadedTree root)
 }
 int main()
 {
-    ThreadedTree root=NULL;
-    int values[]={10,5,15,3,7,12,18};
-    for(int i=0;i<7;i++)
+    ThreadedTree root = NULL;
+    int values[] = {10, 5, 15, 3, 7, 12, 18};
+    
+    printf("=== 1. Building initial binary search tree ===\n");
+    for(int i = 0; i < 7; i++)
     {
-        insertNode(&root,values[i]);
+        insertNode(&root, values[i]);
+        printf("Insert node: %d\n", values[i]);
     }
+    printf("\n");
+
+    // Inorder threading and traversal
+    printf("=== 2. Testing inorder threading and traversal ===\n");
     createinorederthread(root);
-    printf("Inorder traversal of the threaded binary tree:\n");
-    traverinorderthread(head->left);
-    printf("\n");
-    clearthread(root);
-    free(head);// 释放头节点因为创建树会再次分配头节点,如果不释放就会内存泄漏
-    createpreorderthread(root);
-    printf("Preorder traversal of the threaded binary tree:\n");
-    traverpreorderthread(head->left);
-    printf("\n");
+    printf("Inorder traversal result: ");
+    traverinorderthread(root);
+    printf("\n\n");
+    
+    // Must clear threads before subsequent regular tree operations (like deletion)
     clearthread(root);
     free(head);
-    createpostorderthread(root);
-    printf("Postorder traversal of the threaded binary tree:\n");
-    traverpostorderthread(head->left);
+
+    // ================= Added: Deletion function test =================
+    printf("=== 3. Testing node deletion function ===\n");
+    
+    // Test deleting leaf node
+    printf("Attempting to delete leaf node 3...\n");
+    deletenode(&root, 3);
+    
+    // Test deleting node with two children
+    printf("Attempting to delete node 15 (has two children)...\n");
+    deletenode(&root, 15);
+
+    // Test deleting non-existent node
+    printf("Attempting to delete non-existent node 100...\n");
+    deletenode(&root, 100);
     printf("\n");
-    // 释放树,必须先进行去线索化,线索指针指向的节点可能已经被释放了,
-    //如果不先去线索化就会访问到已经被释放的内存地址,造成不可预知的错误
+    // ======================================================
+
+    // Preorder threading and traversal (verify tree structure is still correct after deletion)
+    printf("=== 4. Testing preorder threading and traversal after deletion ===\n");
+    createpreorderthread(root);
+    printf("Preorder traversal result: ");
+    traverpreorderthread(root);
+    printf("\n\n");
+    
+    clearthread(root);
+    free(head);
+
+    // Postorder threading and traversal (using the fixed createpostorderthread logic from our previous discussion)
+    printf("=== 5. Testing postorder threading and traversal after deletion ===\n");
+    createpostorderthread(root);
+    printf("Postorder traversal result (reverse order): ");
+    traverpostorderthread(root);
+    printf("\n\n");
+
+    // Free resources
+    printf("=== 6. Cleaning up memory ===\n");
     clearthread(root);
     freetree(root);
     free(head);
+    printf("All memory freed, program exiting normally.\n");
+    sleep(1); // Ensure output is fully displayed before exit
     return 0;
 }
