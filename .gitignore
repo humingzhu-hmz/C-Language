@@ -2,6 +2,6 @@
 !.gitignore
 !.gitattributes
 ! /MYcode/
-! /MYcode/**/
+! /MYcode/**/*
 !*.c
 !*.cpp
