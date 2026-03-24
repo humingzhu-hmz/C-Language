@@ -1,7 +1,6 @@
 *
 !.gitignore
 !.gitattributes
-!.vscode/
 ! /MYcode/
 ! /MYcode/**/
 !*.c
