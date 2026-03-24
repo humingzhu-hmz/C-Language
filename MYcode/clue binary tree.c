@@ -388,35 +388,35 @@ int main()
     }
     printf("\n");
 
-    // Inorder threading and traversal
+    // 中序线索化与遍历
     printf("=== 2. Testing inorder threading and traversal ===\n");
     createinorederthread(root);
     printf("Inorder traversal result: ");
     traverinorderthread(root);
     printf("\n\n");
     
-    // Must clear threads before subsequent regular tree operations (like deletion)
+    // 必须清理线索才能进行后续的常规树操作（如删除）
     clearthread(root);
     free(head);
 
-    // ================= Added: Deletion function test =================
+    // ================= 新增：删除功能测试 =================
     printf("=== 3. Testing node deletion function ===\n");
     
-    // Test deleting leaf node
+    // 测试删除叶子节点
     printf("Attempting to delete leaf node 3...\n");
     deletenode(&root, 3);
     
-    // Test deleting node with two children
+    // 测试删除带有两个孩子的节点
     printf("Attempting to delete node 15 (has two children)...\n");
     deletenode(&root, 15);
 
-    // Test deleting non-existent node
+    // 测试删除不存在的节点
     printf("Attempting to delete non-existent node 100...\n");
     deletenode(&root, 100);
     printf("\n");
     // ======================================================
 
-    // Preorder threading and traversal (verify tree structure is still correct after deletion)
+    // 先序线索化与遍历 (验证删除操作后，树的结构是否依然正确)
     printf("=== 4. Testing preorder threading and traversal after deletion ===\n");
     createpreorderthread(root);
     printf("Preorder traversal result: ");
@@ -426,19 +426,19 @@ int main()
     clearthread(root);
     free(head);
 
-    // Postorder threading and traversal (using the fixed createpostorderthread logic from our previous discussion)
+    // 后序线索化与遍历 (记得应用我们上一条沟通中修复的 createpostorderthread 逻辑)
     printf("=== 5. Testing postorder threading and traversal after deletion ===\n");
     createpostorderthread(root);
     printf("Postorder traversal result (reverse order): ");
     traverpostorderthread(root);
     printf("\n\n");
 
-    // Free resources
+    // 释放资源
     printf("=== 6. Cleaning up memory ===\n");
     clearthread(root);
     freetree(root);
     free(head);
     printf("All memory freed, program exiting normally.\n");
-    sleep(1); // Ensure output is fully displayed before exit
+    sleep(1); // 确保输出完整显示后再退出
     return 0;
 }
