@@ -22,5 +22,7 @@
         "cpp": "cmd /c \"cd /d $dirWithoutTrailingSlash && if not exist ..\\VS_Code_Build\\Debug mkdir ..\\VS_Code_Build\\Debug && if not exist ..\\VS_Code_Build\\Debug\\obj mkdir ..\\VS_Code_Build\\Debug\\obj && if not exist ..\\VS_Code_Build\\Debug\\exe mkdir ..\\VS_Code_Build\\Debug\\exe && g++ \\\"$fileName\\\" -c -o ..\\VS_Code_Build\\Debug\\obj\\$fileNameWithoutExt.o -g && g++ ..\\VS_Code_Build\\Debug\\obj\\$fileNameWithoutExt.o -o ..\\VS_Code_Build\\Debug\\exe\\$fileNameWithoutExt.exe && start cmd /k ..\\VS_Code_Build\\Debug\\exe\\$fileNameWithoutExt.exe\""
     },
     "debug.onTaskErrors": "abort",
-    "terminal.integrated.enableMultiLinePasteWarning": "never"
+    "terminal.integrated.enableMultiLinePasteWarning": "never",
+    "C_Cpp.errorSquiggles": "disabled",
+    "markdown.validate.enabled": true
 }

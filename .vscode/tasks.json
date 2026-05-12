@@ -4,7 +4,7 @@
         {
             "label": "build-c",
             "type": "shell",
-            "command": "cmd",
+            "command": "D:/ProgrameConifgure/MinGw/mingw64/bin/gcc.exe",
             "args": [
                 "/c",
                 "cd /d \"${fileDirname}\" && if not exist \"..\\VS_Code_Build\\Debug\\${fileDirnameBasename}\\obj\" mkdir \"..\\VS_Code_Build\\Debug\\${fileDirnameBasename}\\obj\" && if not exist \"..\\VS_Code_Build\\Debug\\${fileDirnameBasename}\\exe\" mkdir \"..\\VS_Code_Build\\Debug\\${fileDirnameBasename}\\exe\" && gcc -c \"${file}\" -o \"..\\VS_Code_Build\\Debug\\${fileDirnameBasename}\\obj\\${fileBasenameNoExtension}.o\" -g && gcc \"..\\VS_Code_Build\\Debug\\${fileDirnameBasename}\\obj\\${fileBasenameNoExtension}.o\" -o \"..\\VS_Code_Build\\Debug\\${fileDirnameBasename}\\exe\\${fileBasenameNoExtension}.exe\""
@@ -39,8 +39,8 @@
         },
         {
             "type": "cppbuild",
-            "label": "C/C++: gcc.exe 生成活动文件",
-            "command": "D:/ProgrameConifgure/MinGw/mingw64/bin/gcc.exe",
+            "label": "C/C++: g++.exe 生成活动文件",
+            "command": "D:/ProgrameConifgure/MinGw/mingw64/bin/g++.exe",
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
